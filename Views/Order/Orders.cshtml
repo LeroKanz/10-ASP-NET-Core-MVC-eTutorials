@@ -1,0 +1,60 @@
+﻿@using eTutorials.Data.ViewModels;
+@model ShoppingCartVM
+
+@{
+    ViewData["Title"] = "Total for the corses:";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <div class="tab-center">
+            <h2>You select and going to pay for that courses:</h2>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Price</th>
+                    <th>Amount</th>
+                    <th>Sum</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ShoppingCart.ShoppingCartItems)
+                {
+                    <tr>
+                        <td class="align-middle">@item.Course.Name</td>
+                        <td class="align-middle">@item.Course.Price.ToString("c")</td>
+                        <td class="align-middle">@item.Amount</td>
+                        <td class="align-middle">@((item.Amount*item.Course.Price).ToString("c"))</td>
+                        <td class="align-middle">
+                            <a class="text-danger" asp-controller="Order" asp-action="RemoveItemFromShoppingCart" asp-route-id="@item.Course.Id">
+                            <i class="bi bi-cart-dash"></i></a>
+                            |
+                            <a class="text-success" asp-controller="Order" asp-action="AddItemToShoppingCart" asp-route-id="@item.Course.Id">
+                            <i class="bi bi-cart-plus"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2"></td>
+                    <td><b>Total:</b></td>
+                    <td>@Model.ShoppingCartTotal.ToString("c")</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="text-center">
+            <div class="btn-group">
+                <a class="btn btn-outline-primary" asp-action="CompleteOrder" asp-controller="Order"> Complete the Order!</a>
+                <a class="btn btn-outline-success" asp-action="Courses" asp-controller="Course"> Add more Courses!</a>
+            </div>
+        </div>
+
+    </div>
+</div>

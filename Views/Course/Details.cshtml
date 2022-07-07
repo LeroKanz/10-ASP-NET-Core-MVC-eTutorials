@@ -1,0 +1,89 @@
+﻿@model Course
+
+@{
+    ViewData["Title"] = "The Course:";
+}
+
+<div class="row">
+    
+        <div class="col-md-9 offset-4">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-12">
+                        <div class="card-header text-white bg-primary">
+                            <p class="card-text">
+                                <h5 class="card-title">
+                                    @Model.Name
+                                </h5>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="@Model.LogoUrl" width="100%" alt="@Model.Name">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <p class="card-text"><h5>@Model.Description</h5></p>
+                            <p class="card-text">
+                                <b>Company: </b>
+                                <a asp-action="Details" asp-controller="Company" asp-route-id="@Model.CompanyId">@Model.Company.Name</a>
+                            </p>
+                            <p class="card-text">
+                                <b>Author: </b>@Model.AuthorId
+                                <a asp-action="Details" asp-controller="Author" asp-route-id="@Model.AuthorId">@Model.Author.FullName</a>
+                            </p>
+                            <p class="card-text"><b>Category: </b>@Model.CourseCategory</p>
+                            <p class="card-text"><b>Start Date: </b>@Model.StartDate.ToString("dd MMM yy")</p>
+                            <p class="card-text"><b>End Date: </b>@Model.EndDate.ToString("dd MMM yy")</p>
+                            <p class="card-text ">
+                                <b>Status: </b>
+                                @if (DateTime.Now >= Model.StartDate && DateTime.Now <= Model.EndDate)
+                                {
+                                    <span class="badge bg-success text-white">GOING</span>
+                                }
+                                else if (DateTime.Now > Model.EndDate)
+                                {
+                                    <span class="badge bg-danger text-white">EXPIRED</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-primary text-white">STARTING SOON</span>
+                                }
+                            </p>
+
+                            <p class="card-text">
+                                <b>Teachers:</b>
+                                <hr />
+                                <div class="row">
+                                    @foreach (var item in Model.Teachers_Courses)
+                                    {
+                                    <div class="colomn text-center">
+                                        <img class="border-info rounded-circle" src="@item.Teacher.LogoUrl" style="max-width:175px" alt="@item.Teacher.FullName" />
+                                        <br />
+                                        <a asp-action="Details" asp-controller="Teacher" asp-route-id="@item.TeatherId">@item.Teacher.FullName</a>
+                                    </div>
+                                    }
+                                </div>
+                            </p>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card-footer ">
+                            <p class="card-text">
+                                <a class="btn btn-outline-primary float-right" asp-action="Courses">
+                                    Back to list.
+                                </a>
+                                <a class="btn btn-success text-white @((DateTime.Now > Model.EndDate) ? "disabled" : "")"
+                                   asp-controller="Order"
+                                   asp-action="AddItemToShoppingCart"
+                                   asp-route-id="@Model.Id">
+                                    <i class="bi bi-cart3"></i> Buy for: @Model.Price.ToString("C", new System.Globalization.CultureInfo("en-US"))
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

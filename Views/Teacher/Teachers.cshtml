@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Teacher>
+
+@{ 
+    ViewData["Title"] = "A list of Teachers:";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <table class="table">
+            <thead>
+                <tr class="text-center">
+                    <th>@Html.DisplayNameFor(model => model.LogoUrl)</th>
+                    <th>@Html.DisplayNameFor(model => model.FullName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Experience)</th>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <th>Actions</th>
+                    }
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td class="alain-middle">
+                        <img class="rounded-circle" src="@item.LogoUrl" alt="@item.FullName" style="max-width: 170px" />
+                    </td>
+                    <td class="alain-middle">
+                        @Html.DisplayFor(mI => item.FullName)
+                    </td>
+                    <td class="alain-middle">
+                        @Html.DisplayFor(mI => item.Experience)
+                    </td>
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <td class="alain-middle">
+                            <a class="btn btn-warning" asp-action="Edit" asp-controller="Teacher" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i>Edit</a> |
+                            <a class="btn btn-info" asp-action="Details" asp-controller="Teacher" asp-route-id="@item.Id"><i class="bi bi-eye"></i>Details</a> |
+                            <a class="btn btn-danger" asp-action="Delete" asp-controller="Teacher" asp-route-id="@item.Id"><i class="bi bi-trash">Delete</i></a>
+                        </td>
+                    }
+
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div style="position:fixed; right:70px; bottom:70px" class="text-black-50">
+    <a asp-action="Create" asp-controller="Teacher" class="btn btn-success"><i class="bi bi-plus-circle"></i> Add New</a>
+</div>
